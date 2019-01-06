@@ -1,0 +1,1 @@
+easy2code -t ./example/golang_enum/enum.tmpl -s "./example/golang_enum/schemas/*" -c  "./example/golang_enum/genenum/{{name}}.go"
