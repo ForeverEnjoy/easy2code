@@ -1,0 +1,13 @@
+{
+    "name" : "check_type",
+    "enums" : [
+        {
+            "name" : "check_only",
+            value : 1
+        },
+        {
+            "name" : "substitute",
+            value : 2
+        }
+    ]
+}

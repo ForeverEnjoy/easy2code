@@ -1,0 +1,32 @@
+{% with -%}
+
+package {{ name }}
+
+import "strings"
+
+{% set type_name = name | pascalcase  %}
+type Enum{{type_name}} uint64
+
+
+const (
+{% for e in enums %}
+    {{ e.name | pascalcase }} Enum{{type_name}} = {{ e.value -}}
+{% endfor %}
+)
+
+var (
+	EnumNameToValue map[string]uint64 = make(map[string]uint64)
+	ValueToEnumName map[uint64]string = make(map[uint64]string)
+)
+
+func init() {
+{% for e in enums %}
+    EnumNameToValue["{{ e.name | upper }}"] = {{ e.value -}}
+{% endfor %}
+{% for e in enums %}
+    ValueToEnumName[{{ e.value }}] = {{ e.name | upper -}}
+{% endfor %}
+}
+
+{%- endwith %}
+

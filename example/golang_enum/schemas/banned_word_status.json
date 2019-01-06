@@ -1,0 +1,13 @@
+    {
+        "name" : "banned_word_status",
+        "enums" : [
+            {
+                "name" : "approved",
+                "value" : "1"
+            },
+            {
+                "name" : "forbidden",
+                "value" : "2"
+            }
+        ]
+    }
