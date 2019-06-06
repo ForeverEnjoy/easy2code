@@ -1,0 +1,17 @@
+{
+    name : "animal_type",
+    enums : [
+        {
+            name : "cat",
+            value : 1
+        },
+        {
+            name : "dog",
+            value : 2
+        },
+        {
+            name: "rabbit",
+            value: 3
+        }
+    ]
+}

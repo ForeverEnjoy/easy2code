@@ -11,11 +11,12 @@ import errno
 import execjs
 import stringconvertor
 
+
 class OptArg:
     template_file = ''
     code_file = ''
-    schema_file = ''
-    schema_file_type = ''
+    instance_file = ''
+    instance_file_type = ''
 
     def __init__(self):
         pass
@@ -30,30 +31,30 @@ def get_opt_arg():
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "ht:c:s:o:",
-            ["template_file=", "code_file=", "schema_file=", "schema_file_type="]
+            "ht:c:i:",
+            ["template_file=", "code_file=", "instance_file="]
         )
     except getopt.GetoptError:
-        print('-t <template_file> -c <code_file> -s <schema_file> -o <schema_file_type>')
+        print('-t <template_file> -i <instance_file> -c <code_file>')
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print('Usage: main.py -t <template_file> -c <code_file> -s <schema_file> -o <schema_file_type>')
+            print('Usage: easy2code -t <template_file> -i <instance_file> -c <code_file>')
             sys.exit()
         elif opt in ("-t", "--template_file"):
             optarg.template_file = arg
         elif opt in ("-c", "--code_file"):  # output code file
             optarg.code_file = arg
-        elif opt in ("-s", "--schema_file"):  # dir/* dir/*.txt dir/file.txt
-            optarg.schema_file = arg
-        elif opt in ("-o", "--schema_file_type"):  # js or json5
-            optarg.schema_file_type = arg
+        elif opt in ("-i", "--instance_file"):  # dir/* dir/*.txt dir/file.txt
+            optarg.instance_file = arg
+        elif opt in ("-o", "--instance_file_type"):  # TODO js or json5 
+            optarg.instance_file_type = arg
     return optarg
 
 
-def read_config(schema_file, schema_type):
-    content = open(schema_file, 'r').read()
+def read_config(instance_file, schema_type):
+    content = open(instance_file, 'r').read()
     if 'js' == schema_type:
         ctx = execjs.compile(content)
         return ctx.eval('__config__')
@@ -90,14 +91,15 @@ if __name__ == '__main__':
     template = env.get_template(opt_arg.template_file)
 
     # list all file match config path
-    for e in glob.glob(opt_arg.schema_file):
-        config = read_config(e, opt_arg.schema_file_type)
+    for e in glob.glob(opt_arg.instance_file):
+        config = read_config(e, opt_arg.instance_file_type)
         print (config)
         out = template.render(config)
 
         out_path = env.from_string(opt_arg.code_file).render(config)
         if '' == out_path:
             raise ValueError('output path is empty')
+        print out_path
 
         write_to(out_path, out)
 
